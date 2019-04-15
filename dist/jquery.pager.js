@@ -167,7 +167,7 @@
           .on('click', $.proxy(function (e) {
             var $page = $(e.currentTarget);
             if ($page.hasClass('current')) return;
-            this.change(page);
+            this.change($page.data('value'));
           }, this))
           .appendTo(this.$pages);
       }

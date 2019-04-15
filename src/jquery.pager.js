@@ -223,7 +223,7 @@
             var $page = $(e.currentTarget);
             if ($page.hasClass('current')) return;
             // 回调
-            this.change(page);
+            this.change($page.data('value'));
           }, this))
           .appendTo(this.$pages);
 
