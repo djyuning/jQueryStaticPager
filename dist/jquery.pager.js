@@ -1,40 +1,27 @@
+/**
+ * jquery-static-pager 1.0.1
+ * 基于 jQuery 的静态数据分页组件
+ * http://www.tperiod.com/
+ * Copyright 2011 - 2019
+ * Released under the MIT license.
+ */
 (function () {
   'use strict';
-
-  // 分页组件
   var Pager;
-
   Pager = function (el, options) {
     this.$this = $(el);
-
-    // 参数合并
     this.options = $.extend(true, {}, Pager['DEFAULTS'], options);
-
-    // 初始化
     this.init();
-
   };
-
   Pager.prototype = {
-
-    // 初始化
     init: function () {
-      // 当前页
       this.current = this.options.current || 1;
-
-      // 总页数
       this.pageTotal = Math.ceil(this.options.total / this.options.size);
-
-      // 是否可以显示 前 N 页 和 下 N 页
       this.ellipsis = this.pageTotal > this.options.span;
-      this.ellipsisSumPrev = this.options.span; // 当前页码大于该阈值时，可显示 【前 N 页】 按钮
-      this.ellipsisSumNext = this.pageTotal - this.options.span; // 当前页码小该阈值时，可显示 【后 N 页】 按钮
-
-      // 初始化
+      this.ellipsisSumPrev = this.options.span; 
+      this.ellipsisSumNext = this.pageTotal - this.options.span; 
       this.create();
     },
-
-    // 创建分页
     create: function () {
       var isSimple = this.options.mode === 'simple';
       var isLite = this.options.mode === 'lite';
@@ -42,13 +29,8 @@
       var lang = this.options.lang;
       var total = this.options.total;
       var pageTotal = this.pageTotal;
-
-      // 清空结构
       this.$this.empty();
-
       if (pageTotal > 1) {
-
-        // 首页
         this.$first = $('<a>')
           .text(isSimple ? '<<' : lang.first)
           .attr({
@@ -62,8 +44,6 @@
             this.change(1);
           }, this))
           .appendTo(this.$this);
-
-        // 上一页
         this.$prev = $('<a>')
           .text(isSimple ? '<' : lang.prev)
           .attr({
@@ -77,8 +57,6 @@
             this.change(this.current - 1);
           }, this))
           .appendTo(this.$this);
-
-        // 快速翻页
         if (!isLite) {
           this.$ellipsisPrev = $('<a>')
             .attr({
@@ -94,11 +72,7 @@
             }, this))
             .appendTo(this.$this);
         }
-
-        // 创建页码
         this.$this.append(this.pages(this.current));
-
-        // 快速翻页
         if (!isLite) {
           this.$ellipsisNext = $('<a>')
             .attr({
@@ -114,8 +88,6 @@
             }, this))
             .appendTo(this.$this);
         }
-
-        // 下一页
         this.$next = $('<a>')
           .attr({
             href: 'javascript: void(0);',
@@ -129,8 +101,6 @@
             this.change(this.current += 1);
           }, this))
           .appendTo(this.$this);
-
-        // 最后一页
         this.$end = $('<a>')
           .attr({
             href: 'javascript: void(0);',
@@ -144,35 +114,26 @@
             this.change(pageTotal);
           }, this))
           .appendTo(this.$this);
-
-        // 电梯
         if (this.options.showElevator) {
           this.$elevator = $('<select>')
             .on('change', $.proxy(function () {
               this.change(parseInt(this.$elevator[0].value, 10));
             }, this))
             .appendTo(this.$this);
-
           for (var o = 0; o < pageTotal; o++) {
             var _page = o + 1;
             var options = {
               val: _page,
             };
-
             if (_page === this.current) {
               options['selected'] = 'selected';
             }
-
             $('<option>').attr(options)
               .text(_page)
               .appendTo(this.$elevator);
           }
-
         }
-
       }
-
-      // 统计
       if (!isLite && this.options.showTotal) {
         this.$count = $('<span>')
           .text(lang.total.replace(/(%\w+%)/g, function (word) {
@@ -181,37 +142,21 @@
           }))
           .appendTo(this.$this);
       }
-
-      // 切换到初始页码
       this.go(this.options.current);
     },
-
-    // 创建页码
     pages: function (current) {
-      // 精简版不显示页码
       if (this.options.mode === 'lite') return;
-
       var lang = this.options.lang;
       var span = this.options.span;
       var pageTotal = this.pageTotal;
       var start = 0;
       var end = 0;
-
-      // 起点 和 终点
-      // 如果当前页码小于每次课显示最大页数，则使用 0 开始，否则，分页居中显示
       start = (current < span) ? 0 : current - Math.ceil(span / 2);
       end = Math.min(start + span, pageTotal);
-
-      // 分页组
       this.$pages = this.$pages || $('<div class="pages">');
-
-      // 清空现有结构
       this.$pages.empty();
-
-      // 创建页码
       for (start; start < end; start++) {
         var page = (start + 1);
-
         $('<a>').toggleClass('current', current === page)
           .attr({
             href: 'javascript: void(0);',
@@ -222,75 +167,48 @@
           .on('click', $.proxy(function (e) {
             var $page = $(e.currentTarget);
             if ($page.hasClass('current')) return;
-            // 回调
             this.change(page);
           }, this))
           .appendTo(this.$pages);
-
       }
-
       return this.$pages;
-
     },
-
-    // 分页发生变化
     change: function (page) {
       var isLite = this.options.mode === 'lite';
       var pageTotal = this.pageTotal;
-
-      // 更新到分页
       this.current = page;
-
-      // 常规元素是否可见
       this.$first.toggleClass('disabled', page <= 1);
       this.$prev.toggleClass('disabled', page <= 1);
       this.$next.toggleClass('disabled', page >= pageTotal);
       this.$end.toggleClass('disabled', page >= pageTotal);
-
       if (!isLite) {
         this.$ellipsisPrev.toggle(this.ellipsis && page > this.ellipsisSumPrev);
         this.$ellipsisNext.toggle(this.ellipsis && page < this.ellipsisSumNext);
       }
-
-      // 更新分页
       this.pages(page);
-
-      // 更新电梯
       if (this.options.showElevator) {
         this.$elevator[0].value = page;
       }
-
-      // 回调
       this.options.onChange(page, this.options, this);
     },
-
-    // 跳转到指定页码
     go: function (page) {
       page = parseInt(page, 10);
       page = Math.max(0, page);
       page = Math.min(page, this.pageTotal);
       this.change(page);
     },
-
-    // 销毁
     destroy: function () {
-      // 移除数据
       $.removeData(this.$this[0], Pager['NAME']);
-      // 清空已添加的结构
       this.$this.empty();
     },
-
   };
-
   Pager.NAME = 'pager';
-
-  // 配置参数
   Pager.DEFAULTS = {
-    current: 1, // {number} 当前页
-    total: 0, // {number} 数据总数
-    size: 10, // {number} 每页显示条数
-    span: 5, // 每次显示页数
-    mode: 'default', // {string} 模式，default 完整 | simple 简约 | lite 极简
+    current: 1, 
+    total: 0, 
+    size: 10, 
+    span: 5, 
+    mode: 'default', 
     lang: {
       first: '首页',
       prev: '上一页',
@@ -302,31 +220,22 @@
       ellipsisPrev: '前 %d% 页',
       ellipsisNext: '后 %d% 页',
     },
-    showTotal: true, // 显示总数
-    showElevator: true, // 显示快速直达
-    onChange: $.noop, // 分页发生变化时执行的回调
+    showTotal: true, 
+    showElevator: true, 
+    onChange: $.noop, 
   };
-
-  // 插件调用
   $.fn.pager = function (options) {
     var isMethod = typeof options === 'string';
     var agrs = Array.prototype.slice.call(arguments, 1);
-
     return this.each(function () {
       var $this = $(this),
         data = $.data(this, Pager['NAME']);
-
-      // 初始化
       if (!data) {
         data = $.data(this, Pager['NAME'], new Pager(this, isMethod ? {} : options));
       }
-
-      // 调用方法
       if (isMethod) {
         data[options].apply(data, agrs);
       }
-
     });
   };
-
 })(jQuery);

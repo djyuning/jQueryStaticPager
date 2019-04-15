@@ -1,1 +1,8 @@
+/**
+ * jquery-static-pager 1.0.1
+ * 基于 jQuery 的静态数据分页组件
+ * http://www.tperiod.com/
+ * Copyright 2011 - 2019
+ * Released under the MIT license.
+ */
 .pager{font-size:12px}.pager,.pager .pages{-ms-flex-align:center;align-items:center;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;position:relative}.pager a,.pager select,.pager span{border-radius:3px;margin:2px}.pager a,.pager span{color:#444;display:block;text-decoration:none;padding:0 16px;line-height:32px}.pager select{border:1px solid #ddd;font-size:inherit;height:32px;padding:0 16px}.pager span{color:#999}.pager a:hover{color:#09f}.pager a.current{background-color:#09f;color:#fff}.pager .disabled{opacity:.5;pointer-events:none}.pager .adorn{font-family:SimSun,sans-serif;font-weight:700}.pager-align-left{-ms-flex-pack:start;justify-content:flex-start}.pager-align-center{-ms-flex-pack:center;justify-content:center}.pager-align-right{-ms-flex-pack:end;justify-content:flex-end}
