@@ -61,37 +61,11 @@
 </script>
 ```
 
-## 开发
-
-本工程基于 [Node.js](https://nodejs.org/en/) 8.12.0 开发，构建时请确保本机已安装 8.12.0 或更高版本的 Node.js。
-
-```bash
-# 环境检测
-$ node -v
-
-# 安装构建依赖
-# ==============================================================
-# 如果 npm install 执行失败，可配置为淘宝的镜像，使用下面的命令：
-#
-# npm install -g cnpm --registry=https://registry.npm.taobao.org
-#
-# 然后使用 cnpm install 执行依赖安装。参考：http://npm.taobao.org/
-# ==============================================================
-$ npm install
-
-# 运行一个可实时调试开发的本地 web 服务
-# 可通过 http://127.0.0.1:8888/ 访问
-$ npm run dev
-
-# 构建为可部署的代码
-$ npm run build
-```
-
 ## 配置参数
 
 ### current
 
-指定显示的页码，正整数。插件调用成功后会自动切换到改页。默认为 `1`，页面不能小于 1，不能大约最大页数。
+指定显示的页码，正整数。插件调用成功后会自动切换到该页。默认为 `1`，页码不能小于 1，不能大于最大页数。
 
 ### total
 
@@ -109,9 +83,27 @@ $ npm run build
 
 主题样式，`default` 默认样式，`simple` 简约样式、`lite` 极简样式。
 
+### lang
+
+语言配置，以对象的形式传入。具体内容如下：
+
+```json
+{
+  "first": "首页",
+  "prev": "上一页",
+  "next": "下一页",
+  "end": "最后一页",
+  "hover": "第 %page% 页",
+  "total": "共 %pageTotal% 页 / %total% 条",
+  "pump": "转到第 %d% 页",
+  "ellipsisPrev": "前 %d% 页",
+  "ellipsisNext": "后 %d% 页"
+}
+```
+
 ### showTotal
 
-是否在末尾显示统计信息，默认为 `true`。
+是否在显示统计信息，默认为 `true`。
 
 ### showElevator
 
@@ -119,7 +111,22 @@ $ npm run build
 
 ### onChange
 
-分页选择时执行的回调，该回调支持参数，分别是：`page`当前页码、`options` 实例的配置项、`pager` 实例。
+分页选择时执行的回调，该回调支持参数分别是：`page` 当前页码、`options` 实例的配置项、`pager` 实例。
+
+## 开发
+
+本工程基于 [Node.js](https://nodejs.org/en/) 8.12.0 开发，构建时请确保本机已安装 8.12.0 或更高版本的 Node.js。
+
+```bash
+# 环境检测
+$ node -v
+
+# 安装构建依赖
+$ npm install
+
+# 构建为可部署的代码
+$ npm run build
+```
 
 ## 关于
 
