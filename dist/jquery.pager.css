@@ -1,0 +1,68 @@
+.pager {
+  font-size: 12px;
+}
+.pager,
+.pager .pages {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  position: relative;
+}
+.pager a,
+.pager span,
+.pager select {
+  border-radius: 3px;
+  margin: 2px;
+}
+.pager a,
+.pager span {
+  color: #444;
+  display: block;
+  text-decoration: none;
+  padding: 0 16px;
+  line-height: 32px;
+}
+.pager select {
+  border: 1px #ddd solid;
+  font-size: inherit;
+  height: 32px;
+  padding: 0 16px;
+}
+.pager span {
+  color: #999;
+}
+.pager a:hover {
+  color: #09f;
+}
+.pager a.current {
+  background-color: #09f;
+  color: #fff;
+}
+.pager .disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.pager .adorn {
+  font-family: SimSun, sans-serif;
+  font-weight: bold;
+}
+.pager-align-left {
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+}
+.pager-align-center {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+.pager-align-right {
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}

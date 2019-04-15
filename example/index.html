@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+  <title>jQuery Static Pager 示例</title>
+  <link rel="stylesheet" href="common.css"/>
+  <link rel="stylesheet" href="../dist/jquery.pager.min.css"/>
+</head>
+
+<body>
+<div class="container">
+
+  <a class="repository" href="https://gitlab.haiermoney.com/haikafront/jQueryStaticPager" title="在 GitLab 上查看当前工程"
+     target="_blank">GitLab</a>
+
+  <h1 class="logo">jQuery Static Pager</h1>
+  <p class="overview">一个基于 jQuery 开发的静态数据分页插件</p>
+
+  <div class="test">
+
+    <div class="sub">
+      <span>样式</span>
+      <select name="style">
+        <option value="0">默认</option>
+        <option value="1">简约</option>
+        <option value="2">极简</option>
+      </select>
+      <select name="align">
+        <option value="0">左对齐</option>
+        <option value="1">居中对齐</option>
+        <option value="2">右对齐</option>
+      </select>
+    </div>
+
+    <div class="sub">
+      <span>电梯</span>
+      <label class="checkbox">
+        <input type="radio" name="elevator" value="1" checked/>
+        <span>显示</span>
+      </label>
+      <label class="checkbox">
+        <input type="radio" name="elevator" value="0"/>
+        <span>隐藏</span>
+      </label>
+    </div>
+    <div class="sub">
+      <span>语言</span>
+      <label class="checkbox">
+        <input type="radio" name="lang" value="0" checked/>
+        <span>中文</span>
+      </label>
+      <label class="checkbox">
+        <input type="radio" name="lang" value="1"/>
+        <span>英文</span>
+      </label>
+    </div>
+
+    <div class="sub">
+      <span>每页显示</span>
+      <select name="size">
+        <option value="1">1</option>
+        <option value="3">3</option>
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+      <span>条数据</span>
+    </div>
+
+    <div class="sub">
+      <span>每次显示</span>
+      <select name="span">
+        <option value="1">1</option>
+        <option value="3">3</option>
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+      <span>页</span>
+    </div>
+
+  </div>
+
+  <div class="table body">
+    <table>
+      <thead>
+      <tr>
+        <th width="48">#</th>
+        <th width="200">用户名</th>
+        <th>标题</th>
+        <th width="160">创建日期</th>
+      </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="pager"><!-- 在此渲染分页 --></div>
+
+</div>
+
+<script src="//cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="../dist/jquery.pager.js"></script>
+<script>
+
+$(function () {
+  var lists = []; // 本地数据
+
+  // 分页配置参数
+  var options = {
+    total: 0, // 数据总数，用来生成分页
+    onChange: render, // 回调方法用来更新页面
+  };
+
+  var langEn = {
+    first: 'First',
+    prev: 'Prev',
+    next: 'Next',
+    end: 'Last',
+    hover: '%page%',
+    total: 'Page %pageTotal% / %total% Total',
+    pump: 'Go to page of %d%',
+    ellipsisPrev: 'Prev %d% pages',
+    ellipsisNext: 'Next %d% pages',
+  };
+
+  // ajax 初始化获取数据、初始化插件调用
+  function dataInit() {
+    $.ajax({
+      method: 'GET',
+      url: './data.json',
+      timeout: 1000 * 5,
+      success: function (res) {
+        if (res.code === '0000') {
+          // 缓存数据
+          lists = res.data;
+
+          // 更新配置
+          options = $.extend({}, options, {
+            total: lists.length,
+          });
+
+          // 初始化分页调用
+          $('.pager').pager(options);
+
+        }
+      },
+      error: function (err) {
+        console.error(err);
+      },
+    });
+  }
+
+  // 渲染列表
+  function render(page, options) {
+    if (lists.length === 0) return;
+
+    // 每次从实际分页减去 1，得到初始偏移量
+    page -= 1;
+
+    var _start = page * options.size; // 偏移量*每页数据条数得到截取的开始位置
+    var _rows = lists.slice(_start, _start + options.size);
+    var inner = '';
+
+    // 遍历数据，创建数据行
+    $.each(_rows, function (i, row) {
+      inner += '<tr>';
+      inner += '<td class="center">' + row.id + '</td>';
+      inner += '<td class="center">' + row.name + '</td>';
+      inner += '<td><a href="' + row.url + '" target="_blank">' + row.title + '</a></td>';
+      inner += '<td class="center">' + row.date2 + '</td>';
+      inner += '</tr>';
+    });
+
+    // 避免多次操作 DOM，可以一次性更新到页面
+    $('.table tbody').empty().append(inner);
+  }
+
+  // 初始化
+  dataInit();
+
+  // 外观选择
+  $('[name="style"]').on('change', function (e) {
+    var val = parseInt(e.currentTarget.value, 10);
+
+    switch (val) {
+      case 1:
+        options = $.extend({}, options, {
+          mode: 'simple',
+        });
+        break;
+      case 2:
+        options = $.extend({}, options, {
+          mode: 'lite',
+        });
+        break;
+      default:
+        delete options.mode;
+        break;
+    }
+
+    // 更新调用
+    $('.pager').pager('destroy').pager(options);
+  });
+
+  // 对齐方式无须修改 js 配置
+  $('[name="align"]').on('change', function (e) {
+    var val = parseInt(e.currentTarget.value, 10);
+
+    switch (val) {
+      case 1:
+        $('.pager').removeClass('pager-align-left pager-align-center pager-align-right')
+          .addClass('pager-align-center');
+        break;
+      case 2:
+        $('.pager').removeClass('pager-align-left pager-align-center pager-align-right')
+          .addClass('pager-align-right');
+        break;
+      default:
+        $('.pager').removeClass('pager-align-left pager-align-center pager-align-right');
+        break;
+    }
+  });
+
+  // 是否显示电梯直达
+  $('[name="elevator"]').on('change', function (e) {
+    options = $.extend({}, options, {
+      showElevator: parseInt(e.currentTarget.value, 10) === 1,
+    });
+    // 更新调用
+    $('.pager').pager('destroy').pager(options);
+  });
+
+  // 语言选择
+  $('[name="lang"]').on('change', function (e) {
+    var val = parseInt(e.currentTarget.value, 10);
+    if (val === 0) {
+      if (options.hasOwnProperty('lang')) {
+        delete options.lang;
+      }
+    } else {
+      options = $.extend({}, options, {
+        lang: langEn,
+      });
+    }
+
+    // 更新调用
+    $('.pager').pager('destroy').pager(options);
+  });
+
+  // 每次显示数据条数
+  $('[name="size"]').on('change', function (e) {
+    options = $.extend({}, options, {
+      size: parseInt(e.currentTarget.value, 10),
+    });
+    // 更新调用
+    $('.pager').pager('destroy').pager(options);
+  });
+
+  // 每次显示的页数
+  $('[name="span"]').on('change', function (e) {
+    options = $.extend({}, options, {
+      span: parseInt(e.currentTarget.value, 10),
+    });
+    // 更新调用
+    $('.pager').pager('destroy').pager(options);
+  });
+
+});
+
+</script>
+</body>
+
+</html>

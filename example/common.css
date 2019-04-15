@@ -1,0 +1,184 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #eee;
+  color: #333;
+  font-size: 14px;
+  font-family: Helvetica, Arial, -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 28px;
+}
+
+a {
+  color: #666;
+}
+
+.container {
+  background-color: white;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, .05);
+  min-height: 100vh;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 40px;
+  position: relative;
+  width: 80%;
+}
+
+.logo {
+  font-size: 32px;
+  line-height: 38px;
+  margin: 20px;
+  text-align: center;
+}
+
+.overview {
+  margin-bottom: 64px;
+  text-align: center;
+}
+
+.repository {
+  background-color: #e24329;
+  color: white;
+  font-weight: bold;
+  line-height: 40px;
+  padding: 0 32px;
+  position: absolute;
+  right: 20px;
+  text-align: center;
+  text-decoration: none;
+  top: 0;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 32px;
+  margin: 20px auto;
+}
+
+p {
+  margin: 10px auto;
+}
+
+pre.hljs {
+  border-radius: 5px;
+  margin: 10px auto;
+  overflow: auto;
+  padding: 8px 16px;
+}
+
+.table {
+  margin: 10px auto;
+}
+
+table, th, td {
+  border: 1px #eee solid;
+}
+
+table {
+  background-color: white;
+  border-collapse: collapse;
+  font-size: 14px;
+  width: 100%;
+}
+
+th, td {
+  font-size: 12px;
+  padding: 8px 16px;
+}
+
+thead {
+  background-color: #fafafa;
+}
+
+tbody tr:hover {
+  background-color: #fafafa;
+}
+
+.center {
+  text-align: center;
+}
+
+h4 span:last-child {
+  color: #999;
+  margin-left: 8px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="email"],
+input[type="url"] {
+  border: 1px #ddd solid;
+  border-radius: 3px;
+  font-size: 12px;
+  height: 32px;
+  padding: 0 8px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  margin: 4px auto;
+  height: 14px;
+  width: 14px;
+}
+
+select {
+  border: 1px #ddd solid;
+  border-radius: 3px;
+  font-size: 12px;
+  height: 32px;
+  padding: 0 8px;
+}
+
+.checkbox {
+  align-items: center;
+  display: flex;
+}
+
+.checkbox input[type="checkbox"],
+.checkbox input[type="radio"] {
+  margin: 0 4px;
+}
+
+.checkbox span {
+  display: inline-block;
+  font-size: 12px;
+}
+
+.button {
+  background-color: #09f;
+  border: 1px #08f solid;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 12px;
+  line-height: 32px;
+  padding: 0 12px;
+}
+
+.test {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5px;
+}
+
+.test .sub {
+  align-items: center;
+  display: flex;
+  padding: 5px;
+}
+
+.test .sub  > span {
+  display: inline-block;
+  font-size: 12px;
+  padding: 0 8px;
+}
+
+.test .sub  >  select {
+  margin: 0 4px;
+}

@@ -1,0 +1,86 @@
+// 静态分页
+
+@pagerSize: 32px; // 组件适配尺寸
+@pagerFontSize: 12px; // 字号
+@pagerItemSpace: 2px; // 条目外边距
+@pagerItemRadius: 3px; // 条目圆角
+@pagerColorPrimary: #09f; // 主题色
+@pagerTextColor: #444; // 默认文本色
+@pagerLightTextColor: #999; // 置灰文本色
+@pagerSelectBorderColor: #ddd; // 下拉选框边框色
+
+.pager {
+  font-size: @pagerFontSize;
+
+  &, .pages {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  a, span, select {
+    border-radius: @pagerItemRadius;
+    margin: @pagerItemSpace;
+  }
+
+  a, span {
+    color: @pagerTextColor;
+    display: block;
+    text-decoration: none;
+    padding: 0 @pagerSize/2;
+    line-height: @pagerSize;
+  }
+
+  // 下拉元素 - 电梯直达
+  select {
+    border: 1px @pagerSelectBorderColor solid;
+    font-size: inherit;
+    height: @pagerSize;
+    padding: 0 @pagerSize/2;
+  }
+
+  // 文本元素
+  span {
+    color: @pagerLightTextColor;
+  }
+
+  // 元素划过
+  a:hover {
+    color: @pagerColorPrimary;
+  }
+
+  // 高亮页码
+  a.current {
+    background-color: @pagerColorPrimary;
+    color: #fff;
+  }
+
+  // 禁用条目
+  .disabled {
+    opacity: .5;
+    pointer-events: none;
+  }
+
+  // 修饰元素
+  .adorn {
+    font-family: SimSun, sans-serif;
+    font-weight: bold;
+  }
+
+  // 对齐
+  &-align {
+    &-left {
+      justify-content: flex-start;
+    }
+
+    &-center {
+      justify-content: center;
+    }
+
+    &-right {
+      justify-content: flex-end;
+    }
+  }
+
+}
