@@ -21,23 +21,27 @@
     init: function () {
       // 当前页
       this.current = this.options.current || 1;
-
       // 总页数
       this.pageTotal = Math.ceil(this.options.total / this.options.size);
+
+      // 样式
+      this.isLite = this.options.mode.toLowerCase() === 'lite';
+      this.isSimple = this.options.mode.toLowerCase() === 'simple';
 
       // 是否可以显示 前 N 页 和 下 N 页
       this.ellipsis = this.pageTotal > this.options.span;
       this.ellipsisSumPrev = this.options.span; // 当前页码大于该阈值时，可显示 【前 N 页】 按钮
-      this.ellipsisSumNext = this.pageTotal - this.options.span; // 当前页码小该阈值时，可显示 【后 N 页】 按钮
+      this.ellipsisSumNext = this.pageTotal - this.options.span; // 当前页码小于该阈值时，可显示 【后 N 页】 按钮
 
       // 初始化
       this.create();
+
+      // 使用左右键切换页码
+      this.keyboard();
     },
 
     // 创建分页
     create: function () {
-      var isSimple = this.options.mode === 'simple';
-      var isLite = this.options.mode === 'lite';
       var span = this.options.span;
       var lang = this.options.lang;
       var total = this.options.total;
@@ -50,12 +54,12 @@
 
         // 首页
         this.$first = $('<a>')
-          .text(isSimple ? '<<' : lang.first)
+          .text(this.isSimple ? '<<' : lang.first)
           .attr({
             href: 'javascript: void(0);',
             title: lang.pump.replace('%d%', 1),
           })
-          .toggleClass('adorn', isSimple)
+          .toggleClass('adorn', this.isSimple)
           .toggleClass('disabled', this.current <= 1)
           .on('click', $.proxy(function () {
             if (this.current === 1) return;
@@ -65,12 +69,12 @@
 
         // 上一页
         this.$prev = $('<a>')
-          .text(isSimple ? '<' : lang.prev)
+          .text(this.isSimple ? '<' : lang.prev)
           .attr({
             href: 'javascript: void(0);',
             title: lang.prev,
           })
-          .toggleClass('adorn', isSimple)
+          .toggleClass('adorn', this.isSimple)
           .toggleClass('disabled', this.current <= 1)
           .on('click', $.proxy(function () {
             if (this.current === 1) return;
@@ -79,7 +83,7 @@
           .appendTo(this.$this);
 
         // 快速翻页
-        if (!isLite) {
+        if (!this.isLite) {
           this.$ellipsisPrev = $('<a>')
             .attr({
               href: 'javascript: void(0);',
@@ -99,7 +103,7 @@
         this.$this.append(this.pages(this.current));
 
         // 快速翻页
-        if (!isLite) {
+        if (!this.isLite) {
           this.$ellipsisNext = $('<a>')
             .attr({
               href: 'javascript: void(0);',
@@ -121,9 +125,9 @@
             href: 'javascript: void(0);',
             title: lang.next,
           })
-          .toggleClass('adorn', isSimple)
+          .toggleClass('adorn', this.isSimple)
           .toggleClass('disabled', this.current >= pageTotal)
-          .text(isSimple ? '>' : lang.next)
+          .text(this.isSimple ? '>' : lang.next)
           .on('click', $.proxy(function () {
             if (this.current === pageTotal) return;
             this.change(this.current += 1);
@@ -136,9 +140,9 @@
             href: 'javascript: void(0);',
             title: lang.end,
           })
-          .toggleClass('adorn', isSimple)
+          .toggleClass('adorn', this.isSimple)
           .toggleClass('disabled', this.current >= pageTotal)
-          .text(isSimple ? '>>' : lang.end)
+          .text(this.isSimple ? '>>' : lang.end)
           .on('click', $.proxy(function () {
             if (this.current === pageTotal) return;
             this.change(pageTotal);
@@ -173,7 +177,7 @@
       }
 
       // 统计
-      if (!isLite && this.options.showTotal) {
+      if (!this.isLite && this.options.showTotal) {
         this.$count = $('<span>')
           .text(lang.total.replace(/(%\w+%)/g, function (word) {
             if (word.indexOf('pageTotal') !== -1) return pageTotal;
@@ -181,6 +185,9 @@
           }))
           .appendTo(this.$this);
       }
+
+      // 回调
+      this.onCreated(this);
 
       // 切换到初始页码
       this.go(this.options.current);
@@ -222,7 +229,6 @@
           .on('click', $.proxy(function (e) {
             var $page = $(e.currentTarget);
             if ($page.hasClass('current')) return;
-            // 回调
             this.change($page.data('value'));
           }, this))
           .appendTo(this.$pages);
@@ -233,9 +239,34 @@
 
     },
 
+    // 使用左右键切换页码
+    keyboard: function () {
+      if (!this.options.keyboard) return;
+
+      $(document).on('keyup.' + Pager.NAME, $.proxy(function (e) {
+        if (this.pageTotal > 1) {
+
+          // 上一页
+          if (e.which === 37) {
+            this.change(Math.max(1, this.current - 1));
+            e.preventDefault();
+            e.stopPropagation();
+          }
+
+          // 下一页
+          if (e.which === 39) {
+            this.change(Math.min(this.pageTotal, this.current + 1));
+            e.preventDefault();
+            e.stopPropagation();
+          }
+
+        }
+      }, this));
+
+    },
+
     // 分页发生变化
     change: function (page) {
-      var isLite = this.options.mode === 'lite';
       var pageTotal = this.pageTotal;
 
       // 更新到分页
@@ -247,7 +278,7 @@
       this.$next.toggleClass('disabled', page >= pageTotal);
       this.$end.toggleClass('disabled', page >= pageTotal);
 
-      if (!isLite) {
+      if (!this.isLite) {
         this.$ellipsisPrev.toggle(this.ellipsis && page > this.ellipsisSumPrev);
         this.$ellipsisNext.toggle(this.ellipsis && page < this.ellipsisSumNext);
       }
@@ -302,8 +333,10 @@
       ellipsisPrev: '前 %d% 页',
       ellipsisNext: '后 %d% 页',
     },
+    keyboard: true, // 使用左右键切换页码
     showTotal: true, // 显示总数
     showElevator: true, // 显示快速直达
+    onCreated: $.noop, // 初始化完成时执行的回调
     onChange: $.noop, // 分页发生变化时执行的回调
   };
 
@@ -313,8 +346,7 @@
     var agrs = Array.prototype.slice.call(arguments, 1);
 
     return this.each(function () {
-      var $this = $(this),
-        data = $.data(this, Pager['NAME']);
+      var data = $.data(this, Pager['NAME']);
 
       // 初始化
       if (!data) {

@@ -5,7 +5,7 @@
 ![ ](https://img.shields.io/badge/gulp-v4.0.0-orange.svg)
 ![ ](https://img.shields.io/badge/jQuery-0769ad.svg)
 
-> 基于 jQuery 的静态数据分页组件。
+> 基于 jQuery 的静态数据分页插件
 
 ![效果截图](screenshot.png)
 
@@ -101,6 +101,10 @@
 }
 ```
 
+### keyboard
+
+是否使用左右键切换页码，默认为 `true`。
+
 ### showTotal
 
 是否在显示统计信息，默认为 `true`。
@@ -108,6 +112,10 @@
 ### showElevator
 
 是否显示下拉表单，下拉表单可快速选择页码，默认为 `true`。
+
+### onCreated
+
+分页创建完成时执行的回调，该回调支持一个参数，`pager` 实例。
 
 ### onChange
 

@@ -1,7 +1,7 @@
 {
   "name": "jquery-static-pager",
-  "version": "1.0.1",
-  "description": "基于 jQuery 的静态数据分页组件",
+  "version": "1.0.2",
+  "description": "基于 jQuery 的静态数据分页插件",
   "main": "gulpfile.js",
   "scripts": {
     "build": "gulp build"

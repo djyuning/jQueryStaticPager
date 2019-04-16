@@ -17,14 +17,15 @@
     init: function () {
       this.current = this.options.current || 1;
       this.pageTotal = Math.ceil(this.options.total / this.options.size);
+      this.isLite = this.options.mode.toLowerCase() === 'lite';
+      this.isSimple = this.options.mode.toLowerCase() === 'simple';
       this.ellipsis = this.pageTotal > this.options.span;
       this.ellipsisSumPrev = this.options.span; 
       this.ellipsisSumNext = this.pageTotal - this.options.span; 
       this.create();
+      this.keyboard();
     },
     create: function () {
-      var isSimple = this.options.mode === 'simple';
-      var isLite = this.options.mode === 'lite';
       var span = this.options.span;
       var lang = this.options.lang;
       var total = this.options.total;
@@ -32,12 +33,12 @@
       this.$this.empty();
       if (pageTotal > 1) {
         this.$first = $('<a>')
-          .text(isSimple ? '<<' : lang.first)
+          .text(this.isSimple ? '<<' : lang.first)
           .attr({
             href: 'javascript: void(0);',
             title: lang.pump.replace('%d%', 1),
           })
-          .toggleClass('adorn', isSimple)
+          .toggleClass('adorn', this.isSimple)
           .toggleClass('disabled', this.current <= 1)
           .on('click', $.proxy(function () {
             if (this.current === 1) return;
@@ -45,19 +46,19 @@
           }, this))
           .appendTo(this.$this);
         this.$prev = $('<a>')
-          .text(isSimple ? '<' : lang.prev)
+          .text(this.isSimple ? '<' : lang.prev)
           .attr({
             href: 'javascript: void(0);',
             title: lang.prev,
           })
-          .toggleClass('adorn', isSimple)
+          .toggleClass('adorn', this.isSimple)
           .toggleClass('disabled', this.current <= 1)
           .on('click', $.proxy(function () {
             if (this.current === 1) return;
             this.change(this.current - 1);
           }, this))
           .appendTo(this.$this);
-        if (!isLite) {
+        if (!this.isLite) {
           this.$ellipsisPrev = $('<a>')
             .attr({
               href: 'javascript: void(0);',
@@ -73,7 +74,7 @@
             .appendTo(this.$this);
         }
         this.$this.append(this.pages(this.current));
-        if (!isLite) {
+        if (!this.isLite) {
           this.$ellipsisNext = $('<a>')
             .attr({
               href: 'javascript: void(0);',
@@ -93,9 +94,9 @@
             href: 'javascript: void(0);',
             title: lang.next,
           })
-          .toggleClass('adorn', isSimple)
+          .toggleClass('adorn', this.isSimple)
           .toggleClass('disabled', this.current >= pageTotal)
-          .text(isSimple ? '>' : lang.next)
+          .text(this.isSimple ? '>' : lang.next)
           .on('click', $.proxy(function () {
             if (this.current === pageTotal) return;
             this.change(this.current += 1);
@@ -106,9 +107,9 @@
             href: 'javascript: void(0);',
             title: lang.end,
           })
-          .toggleClass('adorn', isSimple)
+          .toggleClass('adorn', this.isSimple)
           .toggleClass('disabled', this.current >= pageTotal)
-          .text(isSimple ? '>>' : lang.end)
+          .text(this.isSimple ? '>>' : lang.end)
           .on('click', $.proxy(function () {
             if (this.current === pageTotal) return;
             this.change(pageTotal);
@@ -134,7 +135,7 @@
           }
         }
       }
-      if (!isLite && this.options.showTotal) {
+      if (!this.isLite && this.options.showTotal) {
         this.$count = $('<span>')
           .text(lang.total.replace(/(%\w+%)/g, function (word) {
             if (word.indexOf('pageTotal') !== -1) return pageTotal;
@@ -142,6 +143,7 @@
           }))
           .appendTo(this.$this);
       }
+      this.onCreated(this);
       this.go(this.options.current);
     },
     pages: function (current) {
@@ -173,15 +175,31 @@
       }
       return this.$pages;
     },
+    keyboard: function () {
+      if (!this.options.keyboard) return;
+      $(document).on('keyup.' + Pager.NAME, $.proxy(function (e) {
+        if (this.pageTotal > 1) {
+          if (e.which === 37) {
+            this.change(Math.max(1, this.current - 1));
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          if (e.which === 39) {
+            this.change(Math.min(this.pageTotal, this.current + 1));
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }
+      }, this));
+    },
     change: function (page) {
-      var isLite = this.options.mode === 'lite';
       var pageTotal = this.pageTotal;
       this.current = page;
       this.$first.toggleClass('disabled', page <= 1);
       this.$prev.toggleClass('disabled', page <= 1);
       this.$next.toggleClass('disabled', page >= pageTotal);
       this.$end.toggleClass('disabled', page >= pageTotal);
-      if (!isLite) {
+      if (!this.isLite) {
         this.$ellipsisPrev.toggle(this.ellipsis && page > this.ellipsisSumPrev);
         this.$ellipsisNext.toggle(this.ellipsis && page < this.ellipsisSumNext);
       }
@@ -220,16 +238,17 @@
       ellipsisPrev: '前 %d% 页',
       ellipsisNext: '后 %d% 页',
     },
+    keyboard: true, 
     showTotal: true, 
     showElevator: true, 
+    onCreated: $.noop, 
     onChange: $.noop, 
   };
   $.fn.pager = function (options) {
     var isMethod = typeof options === 'string';
     var agrs = Array.prototype.slice.call(arguments, 1);
     return this.each(function () {
-      var $this = $(this),
-        data = $.data(this, Pager['NAME']);
+      var data = $.data(this, Pager['NAME']);
       if (!data) {
         data = $.data(this, Pager['NAME'], new Pager(this, isMethod ? {} : options));
       }
