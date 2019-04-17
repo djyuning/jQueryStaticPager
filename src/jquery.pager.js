@@ -1,7 +1,6 @@
 (function () {
   'use strict';
 
-  // 分页组件
   var Pager;
 
   Pager = function (el, options) {
@@ -186,8 +185,8 @@
           .appendTo(this.$this);
       }
 
-      // 回调
-      this.onCreated(this);
+      // 执行创建完成回调
+      this.options.onCreated(this);
 
       // 切换到初始页码
       this.go(this.options.current);
@@ -195,19 +194,21 @@
 
     // 创建页码
     pages: function (current) {
-      // 精简版不显示页码
-      if (this.options.mode === 'lite') return;
+      if (this.isLite || this.pageTotal <= 1) return;
 
       var lang = this.options.lang;
       var span = this.options.span;
       var pageTotal = this.pageTotal;
-      var start = 0;
-      var end = 0;
+      var offsetEnd = pageTotal - span;
+      var start;
+      var end;
 
       // 起点 和 终点
-      // 如果当前页码小于每次课显示最大页数，则使用 0 开始，否则，分页居中显示
-      start = (current < span) ? 0 : current - Math.ceil(span / 2);
-      end = Math.min(start + span, pageTotal);
+      // 当前页 < 每次可见页数，起始位置为：0 - span
+      // 当前页 > (最大页数 - span)，其实位置为：(最大页数 - span) - span
+      // 其他情况下，起始位置为：(span / 2) - ((span / 2) + span)
+      start = (current < span) ? 0 : (current > offsetEnd ? offsetEnd : current - Math.ceil(span / 2));
+      end = start + span;
 
       // 分页组
       this.$pages = this.$pages || $('<div class="pages">');
@@ -223,13 +224,13 @@
           .attr({
             href: 'javascript: void(0);',
             title: lang.hover.replace('%page%', page),
-            'data-value': page,
+            'data-page': page,
           })
           .text(page)
           .on('click', $.proxy(function (e) {
             var $page = $(e.currentTarget);
             if ($page.hasClass('current')) return;
-            this.change($page.data('value'));
+            this.change($page.data('page'));
           }, this))
           .appendTo(this.$pages);
 
@@ -272,23 +273,26 @@
       // 更新到分页
       this.current = page;
 
-      // 常规元素是否可见
-      this.$first.toggleClass('disabled', page <= 1);
-      this.$prev.toggleClass('disabled', page <= 1);
-      this.$next.toggleClass('disabled', page >= pageTotal);
-      this.$end.toggleClass('disabled', page >= pageTotal);
+      if (pageTotal > 1) {
+        // 常规元素是否可见
+        this.$first.toggleClass('disabled', page <= 1);
+        this.$prev.toggleClass('disabled', page <= 1);
+        this.$next.toggleClass('disabled', page >= pageTotal);
+        this.$end.toggleClass('disabled', page >= pageTotal);
 
-      if (!this.isLite) {
-        this.$ellipsisPrev.toggle(this.ellipsis && page > this.ellipsisSumPrev);
-        this.$ellipsisNext.toggle(this.ellipsis && page < this.ellipsisSumNext);
-      }
+        if (!this.isLite) {
+          this.$ellipsisPrev.toggle(this.ellipsis && page > this.ellipsisSumPrev);
+          this.$ellipsisNext.toggle(this.ellipsis && page < this.ellipsisSumNext);
+        }
 
-      // 更新分页
-      this.pages(page);
+        // 更新电梯
+        if (this.options.showElevator) {
+          this.$elevator[0].value = page;
+        }
 
-      // 更新电梯
-      if (this.options.showElevator) {
-        this.$elevator[0].value = page;
+        // 更新分页
+        this.pages(page);
+
       }
 
       // 回调
@@ -351,6 +355,12 @@
       // 初始化
       if (!data) {
         data = $.data(this, Pager['NAME'], new Pager(this, isMethod ? {} : options));
+      }
+
+      // 如果是对象，则销毁重建
+      if ($.isPlainObject(options)) {
+        data['destroy'].apply(data);
+        data = $.data(this, Pager['NAME'], new Pager(this, options));
       }
 
       // 调用方法

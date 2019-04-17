@@ -28,18 +28,6 @@ a {
   width: 80%;
 }
 
-.logo {
-  font-size: 32px;
-  line-height: 38px;
-  margin: 20px;
-  text-align: center;
-}
-
-.overview {
-  margin-bottom: 64px;
-  text-align: center;
-}
-
 .repository {
   background-color: #e24329;
   color: white;

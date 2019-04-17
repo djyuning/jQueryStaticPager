@@ -1,5 +1,5 @@
 /**
- * jquery-static-pager 1.0.2
+ * jquery-static-pager 1.0.0
  * 基于 jQuery 的静态数据分页插件
  * http://www.tperiod.com/
  * Copyright 2011 - 2019
@@ -143,18 +143,19 @@
           }))
           .appendTo(this.$this);
       }
-      this.onCreated(this);
+      this.options.onCreated(this);
       this.go(this.options.current);
     },
     pages: function (current) {
-      if (this.options.mode === 'lite') return;
+      if (this.isLite || this.pageTotal <= 1) return;
       var lang = this.options.lang;
       var span = this.options.span;
       var pageTotal = this.pageTotal;
-      var start = 0;
-      var end = 0;
-      start = (current < span) ? 0 : current - Math.ceil(span / 2);
-      end = Math.min(start + span, pageTotal);
+      var offsetEnd = pageTotal - span;
+      var start;
+      var end;
+      start = (current < span) ? 0 : (current > offsetEnd ? offsetEnd : current - Math.ceil(span / 2));
+      end = start + span;
       this.$pages = this.$pages || $('<div class="pages">');
       this.$pages.empty();
       for (start; start < end; start++) {
@@ -163,13 +164,13 @@
           .attr({
             href: 'javascript: void(0);',
             title: lang.hover.replace('%page%', page),
-            'data-value': page,
+            'data-page': page,
           })
           .text(page)
           .on('click', $.proxy(function (e) {
             var $page = $(e.currentTarget);
             if ($page.hasClass('current')) return;
-            this.change($page.data('value'));
+            this.change($page.data('page'));
           }, this))
           .appendTo(this.$pages);
       }
@@ -195,17 +196,19 @@
     change: function (page) {
       var pageTotal = this.pageTotal;
       this.current = page;
-      this.$first.toggleClass('disabled', page <= 1);
-      this.$prev.toggleClass('disabled', page <= 1);
-      this.$next.toggleClass('disabled', page >= pageTotal);
-      this.$end.toggleClass('disabled', page >= pageTotal);
-      if (!this.isLite) {
-        this.$ellipsisPrev.toggle(this.ellipsis && page > this.ellipsisSumPrev);
-        this.$ellipsisNext.toggle(this.ellipsis && page < this.ellipsisSumNext);
-      }
-      this.pages(page);
-      if (this.options.showElevator) {
-        this.$elevator[0].value = page;
+      if (pageTotal > 1) {
+        this.$first.toggleClass('disabled', page <= 1);
+        this.$prev.toggleClass('disabled', page <= 1);
+        this.$next.toggleClass('disabled', page >= pageTotal);
+        this.$end.toggleClass('disabled', page >= pageTotal);
+        if (!this.isLite) {
+          this.$ellipsisPrev.toggle(this.ellipsis && page > this.ellipsisSumPrev);
+          this.$ellipsisNext.toggle(this.ellipsis && page < this.ellipsisSumNext);
+        }
+        if (this.options.showElevator) {
+          this.$elevator[0].value = page;
+        }
+        this.pages(page);
       }
       this.options.onChange(page, this.options, this);
     },
@@ -251,6 +254,10 @@
       var data = $.data(this, Pager['NAME']);
       if (!data) {
         data = $.data(this, Pager['NAME'], new Pager(this, isMethod ? {} : options));
+      }
+      if ($.isPlainObject(options)) {
+        data['destroy'].apply(data);
+        data = $.data(this, Pager['NAME'], new Pager(this, options));
       }
       if (isMethod) {
         data[options].apply(data, agrs);
