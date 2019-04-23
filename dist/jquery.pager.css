@@ -35,6 +35,7 @@
   line-height: 32px;
 }
 .pager select {
+  background-color: white;
   border: 1px #ddd solid;
   font-size: inherit;
   height: 32px;
@@ -55,8 +56,7 @@
   pointer-events: none;
 }
 .pager .adorn {
-  font-family: SimSun, sans-serif;
-  font-weight: bold;
+  font-family: Lantinghei SC, SimSun, sans-serif;
 }
 .pager-align-left {
   -webkit-box-pack: start;

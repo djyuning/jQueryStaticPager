@@ -11,13 +11,12 @@
 
 [演示地址](https://codepen.io/djyuning/full/dLqyEX)
 
-本插件依赖于 jQuery 1.8+，在引用本插件前，请确保 jQuery 已正确引入。并准备必要的调用结构。
+本插件依赖于 [jQuery 1.8+](https://github.com/jquery/jquery/releases?after=1.8.3%2B1)，在引用本插件前，请确保 jQuery 已正确引入。
 
-当前源码自带一个示例文件，可前往 `./example/index.html` 查看。
 
 ```html
 <div class="body"><!-- 在此渲染数据 --></div>
-<div class="pager"><!-- 在此渲染分页 --></div>
+<div class="pager"><!-- 在此渲染分页，pager 选择器不可更改 --></div>
 
 <!-- 引入 CSS 样式 -->
 <link rel="stylesheet" href="jquery.pager.min.css" />
@@ -112,11 +111,11 @@
 
 ### keyboard
 
-是否使用左右键切换页码，默认为 `true`。
+是否使用左右方向键键切换页码，默认为 `true`。
 
 ### showTotal
 
-是否在显示统计信息，默认为 `true`。
+是否显示统计信息，默认为 `true`。
 
 ### showElevator
 
@@ -124,11 +123,11 @@
 
 ### onCreated
 
-分页创建完成时执行的回调，该回调支持一个参数，`pager` 实例。
+分页创建完成时执行的回调函数，支持一个参数：`pager` 实例。
 
 ### onChange
 
-分页选择时执行的回调，该回调支持参数分别是：`page` 当前页码、`options` 实例的配置项、`pager` 实例。
+分页选择时执行的回调函数，支持参数分别是：`page` 当前页码、`options` 实例的配置项、`pager` 实例。
 
 ## 开发
 
@@ -147,4 +146,4 @@ $ npm run build
 
 ## 关于
 
-Copyright &copy; 2011 - 2019 tPeriod Tech
+Copyright &copy; 2019 tPeriod Tech
