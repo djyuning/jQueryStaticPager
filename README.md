@@ -9,6 +9,8 @@
 
 ## 用法
 
+[演示地址](https://codepen.io/djyuning/full/dLqyEX)
+
 本插件依赖于 jQuery 1.8+，在引用本插件前，请确保 jQuery 已正确引入。并准备必要的调用结构。
 
 当前源码自带一个示例文件，可前往 `./example/index.html` 查看。
@@ -17,24 +19,32 @@
 <div class="body"><!-- 在此渲染数据 --></div>
 <div class="pager"><!-- 在此渲染分页 --></div>
 
+<!-- 引入 CSS 样式 -->
 <link rel="stylesheet" href="jquery.pager.min.css" />
+
+<!-- 引入脚本 -->
 <script src="jquery.min.js"></script>
 <script src="jquery.pager.min.js"></script>
+
 <script>
   $(function () {
     // 新建一个变量存储数据
     var lists = [];
 
     // 新建一个函数用于渲染列表
-    function redner(page, options, pager) {
+    function render(page, options, pager) {
       if (lists.length === 0) return;
 
       // 每次从实际分页减去 1，得到初始偏移量
       page -= 1;
 
-      var _start = page * options.size; // 偏移量 * 每页数据条数得到截取的开始位置
+      // 偏移量 * 每页数据条数得到截取的开始位置
+      var _start = page * options.size;
+
+      // 数组截取
       var _rows = lists.slice(_start, _start + options.size);
 
+      // 测试
       console.log('本页数据：', _rows);
 
     };
@@ -44,14 +54,15 @@
       method: 'GET',
       url: './data.json',
       success: function (res) {
-        // 更新数据
+        // 缓存数据
         lists = res.data;
 
         // 调用插件
         $('.pager').pager({
           total: lists.length,
-          onChange: redner
+          onChange: render
         });
+
       }
     });
 
