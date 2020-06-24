@@ -1,6 +1,6 @@
 {
   "name": "jquery-static-pager",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "基于 jQuery 的静态数据分页插件",
   "keywords": [
     "jquery-plugin",
@@ -18,11 +18,10 @@
     "type": "git",
     "url": "https://github.com/djyuning/jQueryStaticPager.git"
   },
-  "dependencies": {},
   "devDependencies": {
     "del": "^4.1.0",
-    "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.1",
+    "gulp": "^4.0.0",
+    "gulp-autoprefixer": "^6.0.0",
     "gulp-banner": "^0.1.3",
     "gulp-cssnano": "^2.1.3",
     "gulp-jshint": "^2.1.0",
@@ -33,5 +32,6 @@
     "gulp-uglify": "^3.0.2",
     "jshint": "^2.10.2"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {}
 }

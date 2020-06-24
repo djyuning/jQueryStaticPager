@@ -21,7 +21,7 @@ const PLUGIN_BANNER = '/**\n' +
   ' * <%= pkg.name %> <%= pkg.version %>\n' +
   ' * <%= pkg.description %>\n' +
   ' * <%= pkg.homepage %>\n' +
-  ` * Copyright 2011 - ${new Date().getFullYear()}\n` +
+  ' * Copyright 2011 - 2019\n' +
   ' * Released under the <%= pkg.license %> license.\n' +
   ' */\n';
 

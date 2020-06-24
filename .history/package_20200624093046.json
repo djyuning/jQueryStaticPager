@@ -1,6 +1,6 @@
 {
   "name": "jquery-static-pager",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "基于 jQuery 的静态数据分页插件",
   "keywords": [
     "jquery-plugin",

@@ -2,7 +2,7 @@
  * jquery-static-pager 1.0.0
  * 基于 jQuery 的静态数据分页插件
  * http://www.tperiod.com/
- * Copyright 2011 - 2019
+ * Copyright 2011 - 2020
  * Released under the MIT license.
  */
 .pager {
@@ -10,13 +10,8 @@
 }
 .pager,
 .pager .pages {
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   position: relative;
 }
@@ -59,17 +54,11 @@
   font-family: Lantinghei SC, SimSun, sans-serif;
 }
 .pager-align-left {
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
   justify-content: flex-start;
 }
 .pager-align-center {
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
 }
 .pager-align-right {
-  -webkit-box-pack: end;
-  -ms-flex-pack: end;
   justify-content: flex-end;
 }

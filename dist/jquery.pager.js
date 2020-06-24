@@ -2,7 +2,7 @@
  * jquery-static-pager 1.0.0
  * 基于 jQuery 的静态数据分页插件
  * http://www.tperiod.com/
- * Copyright 2011 - 2019
+ * Copyright 2011 - 2020
  * Released under the MIT license.
  */
 (function () {
