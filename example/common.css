@@ -96,33 +96,6 @@ h4 span:last-child {
   margin-left: 8px;
 }
 
-input[type="text"],
-input[type="password"],
-input[type="number"],
-input[type="email"],
-input[type="url"] {
-  border: 1px #ddd solid;
-  border-radius: 3px;
-  font-size: 12px;
-  height: 32px;
-  padding: 0 8px;
-}
-
-input[type="checkbox"],
-input[type="radio"] {
-  margin: 4px auto;
-  height: 14px;
-  width: 14px;
-}
-
-select {
-  border: 1px #ddd solid;
-  border-radius: 3px;
-  font-size: 12px;
-  height: 32px;
-  padding: 0 8px;
-}
-
 .checkbox {
   align-items: center;
   display: flex;

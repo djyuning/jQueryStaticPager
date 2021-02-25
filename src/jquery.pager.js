@@ -11,7 +11,6 @@
 
     // 初始化
     this.init();
-
   };
 
   Pager.prototype = {
@@ -197,7 +196,7 @@
       if (this.isLite || this.pageTotal <= 1) return;
 
       var lang = this.options.lang;
-      var span = this.options.span;
+      var span = Math.min(this.options.span, this.pageTotal);
       var pageTotal = this.pageTotal;
       var offsetEnd = pageTotal - span;
       var start;
@@ -205,7 +204,7 @@
 
       // 起点 和 终点
       // 当前页 < 每次可见页数，起始位置为：0 - span
-      // 当前页 > (最大页数 - span)，其实位置为：(最大页数 - span) - span
+      // 当前页 > (最大页数 - span)，起始位置为：(最大页数 - span) - span
       // 其他情况下，起始位置为：(span / 2) - ((span / 2) + span)
       start = (current < span) ? 0 : (current > offsetEnd ? offsetEnd : current - Math.ceil(span / 2));
       end = start + span;

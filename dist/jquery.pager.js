@@ -1,8 +1,8 @@
 /**
- * jquery-static-pager 1.0.0
+ * jquery-static-pager 1.0.2
  * 基于 jQuery 的静态数据分页插件
  * http://www.tperiod.com/
- * Copyright 2011 - 2020
+ * Copyright 2011 - 2021
  * Released under the MIT license.
  */
 (function () {
@@ -149,7 +149,7 @@
     pages: function (current) {
       if (this.isLite || this.pageTotal <= 1) return;
       var lang = this.options.lang;
-      var span = this.options.span;
+      var span = Math.min(this.options.span, this.pageTotal);
       var pageTotal = this.pageTotal;
       var offsetEnd = pageTotal - span;
       var start;

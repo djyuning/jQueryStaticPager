@@ -1,8 +1,8 @@
 /**
- * jquery-static-pager 1.0.0
+ * jquery-static-pager 1.0.2
  * 基于 jQuery 的静态数据分页插件
  * http://www.tperiod.com/
- * Copyright 2011 - 2020
+ * Copyright 2011 - 2021
  * Released under the MIT license.
  */
 .pager {
@@ -28,13 +28,6 @@
   text-decoration: none;
   padding: 0 16px;
   line-height: 32px;
-}
-.pager select {
-  background-color: white;
-  border: 1px #ddd solid;
-  font-size: inherit;
-  height: 32px;
-  padding: 0 16px;
 }
 .pager span {
   color: #999;
